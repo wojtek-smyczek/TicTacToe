@@ -1,58 +1,98 @@
-function gameboard() {
+function playerPick() {
+    const myRows = null;
+    const myColumns = null;
 
-    let createBoard = (n, val = 0) => Array(n).fill(val);
-    let board = createBoard(9, 0);
+    return { myRows, myColumns };
 
-    // metoda do zmiany pola
-
-    return {
-        changeField: function (pick, number) {
-
-            if (number > 8 || number < 0) {
-                return "Out of range";
-            }
-
-            if (pick === 'o') {
-                board[number] = 'o';
-            } else if (pick === 'x') {
-                board[number] = 'x';
-            } else {
-                return "You entered a wrong symbol."
-            }
-        },
-
-        showBoard: function () {
-            for (let i = 0; i < board.length; i += 3) {
-                console.log(board.slice(i, i + 3));
-            }
-        },
-
-    }
-}
-
-function player(name) {
-
-    let score = 0;
-    return {
-        name,
-        getScore: function () {
-            return score;
-        },
-        incrementScore: function () {
-            score += 1;
-            return score;
-        },
-        printScore() {
-            console.log(this.getScore());
-        },
-    }
 }
 
 
-let newGame = gameboard();
-newGame.showBoard();
+function Gameboard() {
+    const board = [];
+    const rows = 3;
+    const columns = 3;
 
-let newPlayer = player('Adam');
 
-newPlayer.incrementScore();
-newPlayer.printScore();
+    for (let i = 0; i < rows; i++) {
+        board[i] = [];
+        for (let j = 0; j < columns; j++) {
+            board[i][j] = 0;
+        }
+    }
+
+    return { board, rows, columns };
+}
+
+const { board, rows, columns } = Gameboard();
+
+// funkcja sprawdzajaca czy po ostatnim dodaniu elementu do gry 
+// ktoras z opcji wygrywa
+function checkBoard(playerPick) {
+    let playerToken = board[myRows, myColumns]; //tutaj bedzie liczba (albo 1 albo 2)
+
+    function rowMatch() {
+        for (let element of board[myRows]) {
+            if (element !== playerPick) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function columnMatch() {
+        for (let element of board[myColumns]) {
+            if (element !== playerPick) {
+                return false
+            }
+        }
+        return true;
+    }
+
+    function firstDiagonalMatch() {
+        for (let i = 0; i < rows; i++) {
+            if (board[i][i] !== playerPick) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function secondDiagonalMatch() {
+        for (let i = 0; i < rows; i++) {
+            if (board[i][columns - 1 - i] !== playerPick) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    return (function () {
+        secondDiagonalMatch();
+        firstDiagonalMatch();
+        columnMatch();
+        rowMatch();
+    }())
+}
+
+function pickToken() {
+    console.log("Type 1 for circle or 2 for cross.")
+
+    let input = prompt("Pick your hero! Player 1 - circle. Player 2 - cross. Type '1' to pick player 1 or '2' for player 2.");
+
+    while (input !== "1" && input !== "2") {
+        console.log("Type '1' or '2'");
+        input = prompt("Pick your hero! Player 1 - circle. Player 2 - cross. Type '1' to pick player 1 or '2' for player 2.");
+    }
+
+    return { input };
+}
+
+function drawBoard() {
+    for (let i = 0; i < rows; i++) {
+        console.log(board[i]);
+    }
+};
+
+
+drawBoard();
+
